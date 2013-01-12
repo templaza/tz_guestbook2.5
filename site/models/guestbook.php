@@ -67,10 +67,19 @@ jimport('joomla.application.component.modelform');
 
             }
         function getInsertcontent(){
+		        if (!isset($_SERVER['HTTP_REFERER'])) return null;
+             $refer  =   $_SERVER['HTTP_REFERER'];
+            $url_arr=   parse_url($refer);
+
+            if ($_SERVER['HTTP_HOST'] != $url_arr['host']) return null;
+
             $hienthik = $this->getState('hienthi_stu'); // cho admin cogfig co hien thi bai hay k
-            $name = $_POST['name'];
+
+            $check_name = strip_tags(htmlspecialchars($_POST['name']));
+            $name = $check_name;
             $email = $_POST['email'];
-            $title = $_POST['title'];
+            $check_title = strip_tags(htmlspecialchars($_POST['title']));
+            $title =  $check_title ;
             $website = $_POST['website'];
             switch($website){
                 case'Your website':
@@ -80,23 +89,24 @@ jimport('joomla.application.component.modelform');
                     $website=$_POST['website'];
                     break;
             }
-            $conten = $_POST['content'];
+
+             $check_content = strip_tags(htmlspecialchars($_POST['content']));
+
+            $conten = $check_content;
             $puli = $_POST['check'];
+            $datetim = JFactory::getDate();
+             $datee = $datetim ->toSql();
             $user   = JFactory::getUser();
             $id =$user->id;
-            if(isset($name) && !empty($name) && isset($email) && !empty($email)    && isset($conten) && !empty($conten)) {
+            if(isset($name) && !empty($name) && isset($email) && !empty($email)   && isset($conten) && !empty($conten)) {
 
-            $a = JFactory::getDate();
-            $datee = $a->toMySQL();
             $db = &JFactory::getDbo();
             $sql='INSERT INTO #__comment values(null,"'.$name.'","'.$email.'","'.$title.'","'.$conten.'",
                                                 "'.$puli.'","'.$datee.'","'.$hienthik.'","'.$website.'","'.$id.'")';
 
-
             $db->setQuery($sql);
             $num_row = $db->query();
             $row = $db->getAffectedRows($num_row);
-
             return $row;
 
             }
