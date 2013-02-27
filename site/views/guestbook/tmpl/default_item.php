@@ -34,7 +34,7 @@
           ?>
            <li class="nnt-warl-comment-li-3">
                <span>
-                    <?php echo JText::_('COM_TZ_GUESTBOOK_WEBSITE'); ?>
+                    <?php echo JText::_('COM_TZ_GUESTBOOK_WEBSITE_SITE'); ?>
                </span>
 
                <a  target="_blank"  href="<?php echo $rr->cwebsite; ?>" rel="nofollow">
