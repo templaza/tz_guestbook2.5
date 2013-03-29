@@ -16,46 +16,38 @@
 # Technical Support:  Forum - http://templaza.com/Forum
 
 -------------------------------------------------------------------------*/
-    defined('_JEXEC') or die;
-    jimport('joomla.application.component.controller');
+defined('_JEXEC') or die;
+jimport('joomla.application.component.controller');
 
-    class Tz_guestbookControllerGuestbook extends JController {
-        function display(){
-            $task = JRequest::getVar('task');
-            $ci = $_POST['cid'];
-			if(isset($_POST['cid']) && $_POST['cid'] !=""){
-            $rr = implode(",",$ci);
-			}else{
-				$rr = 0;
-			}
-            $doc = &JFactory::getDocument();
-            $type = $doc->getType();
+class Tz_guestbookControllerGuestbook extends JController {
 
-            $view= &$this -> getView('guestbook',$type);
+    function display($cachable=false,$urlparams=array()){
+        $task   =  JRequest::getVar('task');
+        $doc    =  JFactory::getDocument();
+        $type   =  $doc->getType();
+        $view   =  $this -> getView('guestbook',$type);
+        $model  =  $this->getModel('guestbook');
+        $view   -> setModel($model,true);
 
-            $model=&$this->getModel('guestbook');
-            $view-> setModel($model,true);
-
-            switch($task){
-                case'edit':
-                case'chitiet':
-                    $view->setLayout('edit');
-                      break;
-                case'unpublish':
-                    $model-> unpulich($rr);
-                    break;
-                case'publish':
-                     $model-> publish($rr);
-                      break;
-                case'remove':
-                    $model->delete($rr);
-                    break;
-                default:
-                    $view->setLayout('default');
-                    break;
-            }
-
-            $view->display();
+        switch($task){
+            case'edit':
+            case'g_edit':
+                $view->setLayout('edit');
+                break;
+            case'unpublish':
+                $model-> unpulich();
+                break;
+            case'publish':
+                $model-> publish();
+                break;
+            case'remove':
+                $model->delete();
+                break;
+            default:
+                $view->setLayout('default');
+                break;
         }
+        $view->display();
     }
+}
 ?>
